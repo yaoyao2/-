@@ -1,0 +1,45 @@
+import time
+from selenium import webdriver
+from bs4 import BeautifulSoup
+
+def execute_times(times,driver):
+    for i in range(times + 1):
+        # 滑动到页面底部，就会自动加载
+        driver.execute_script("window.scrollTo(600, 1200);")
+        # 点击一下按钮，才会自动加载
+        # driver.find_element_by_xpath(
+        #     "//a[contains(text(),'点击加载更多')]").click()  # selenium的xpath用法，找到包含“点击加载更多”的a标签去点击
+        time.sleep(3)
+
+
+
+driver = webdriver.Chrome('F:\Demo\chromedriver.exe')  # 用chrome浏览器打开
+driver.get("http://www.juliandata.com/projectLibrary")  # 打开要爬虫的页面
+time.sleep(5)
+execute_times(10, driver)
+
+html = driver.page_source
+html_soup = BeautifulSoup(html,'lxml')
+coin_list = html_soup.find_all(name='a',attrs={'target':'_blank'})
+# print(coin_list)
+for c in coin_list:
+    print(c)
+
+
+
+
+###########################post请求####################################
+    # import requests
+    # # url = 'http://www.juliandata.com/projectLibrary'
+    # # url = 'http://www.juliandata.com/api2/service/x_service/block_chain_company/list_by_codes'
+    # url = 'http://www.juliandata.com/api/search/blockchain'
+    # postdata = {'filter':{'date': [], 'round': [], 'location': [], 'tag': [], 'yellow': [], 'domestic': 'true'},
+    #                 'date':[], 'domestic':'true', 'location':[], 'round':[], 'tag':[],
+    #             'yellow':[], 'highlight':'true', 'input':"区块链", 'order':"desc", 'sort':1, 'start':10}
+    #
+    # r = requests.post(url, data=postdata)
+    # print(r)
+    # # res = requests.post(url, postdata)
+    # # print(res)
+    # # data = res.json()
+    # # print(data)
